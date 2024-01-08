@@ -22,7 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
 
 const upload = multer({
-    limits: { fileSize: 20 * 1024 * 1024 }, // 10MB file size limit
+    limits: { fileSize: 20 * 1024 * 1024 }, // 20MB file size limit
     fileFilter: function (req, file, cb) {
         if (!file.mimetype.startsWith("video/")) {
             return cb(new Error('You need to upload a video matey'))
@@ -114,6 +114,6 @@ app.use((req, res) => {
     res.status(404).render('error');
 });
 
-app.listen(3009, () => {
-    console.log('Server is running on port 3009');
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
 });
