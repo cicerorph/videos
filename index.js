@@ -196,6 +196,10 @@ app.get('/login', (req, res) => {
     res.redirect(`https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=MubiVideos`);
 });
 
+app.get('/test', (req, res) => {
+    res.send(req.session.name);
+});
+
 app.use(
   cookieSession({
     name: 'session',
