@@ -200,6 +200,7 @@ app.get('/api/auth', (req, res) => {
             // Respond to the client with an error
             res.status(403).json({ error: 'Authentication failed' });
         }
+    });
 });
 
 
