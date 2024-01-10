@@ -68,6 +68,14 @@ const token = crypto.randomBytes(8).toString('hex');
 
 webhook.send(`**I GOT RESTARTED**\nPermanent Token: ${token}\nLink to Generate an single token: [HERE](https://videos.mubi.tech/generateToken?token=${token})`);
 
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: [conf.SECRET], // Add your secret key(s) here
+  })
+);
+
+
 app.post('/upload', upload.single('video'), async (req, res) => {
     const videoPath = '/uploads/' + req.file.filename;
     if (req.body.token !== token) {
@@ -200,13 +208,6 @@ app.get('/test', (req, res) => {
     res.send(req.session);
     console.log(req.session);
 });
-
-app.use(
-  cookieSession({
-    name: 'session',
-    keys: [conf.SECRET], // Add your secret key(s) here
-  })
-);
 
 app.get('/api/auth', async (req, res) => {
   const { privateCode } = req.query;
