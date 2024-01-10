@@ -21,15 +21,12 @@
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between; /* Updated to space-between */
             background-color: rgb(29, 29, 29);
             width: 100%;
-            /* Remove the position: absolute */
-            /* Remove top, right, and z-index properties */
-            /* Remove the box-shadow property if you don't need it */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* Optional: Add a subtle shadow for depth */
             color: #fff;
+            padding: 10px;
         }
 
         .header h1 {
@@ -41,6 +38,15 @@
             color: rgb(255, 255, 255);
             transition: all 0.25s;
             margin-right: 20px;
+            display: flex;
+            align-items: center; /* Align items vertically in the header */
+        }
+
+        .header a img {
+            border-radius: 50%; /* Make the image round */
+            margin-left: 10px; /* Add some margin between name and image */
+            width: 30px; /* Set the width of the image */
+            height: 30px; /* Set the height of the image */
         }
 
         .video-wrapper {
