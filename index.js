@@ -175,6 +175,10 @@ app.get('/videos/:id', (req, res, next) => {
     if (videoIndex !== -1) {
         const video = videos[videoIndex];
         videos.splice(videoIndex, 1);
+        if (video.uploader === undefined) {
+            video.uploader === Unknown
+        }
+        
         res.render('watchvideo', { video: video, videos: videos.randoms(), uploader: video.uploader });
     } else {
         next();
