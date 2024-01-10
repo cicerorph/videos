@@ -145,7 +145,7 @@ app.get('/delete', (req, res) => {
 
 app.get('/videos', (req, res) => {
     const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
-    res.render('videos', { videos: videos });
+    res.render('home', { videos: videos });
 });
 
 // Middleware to check if the user is logged in
