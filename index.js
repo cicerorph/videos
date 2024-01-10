@@ -78,16 +78,6 @@ app.use(
 
 app.post('/upload', upload.single('video'), async (req, res) => {
     const videoPath = '/uploads/' + req.file.filename;
-    if (req.body.token !== token) {
-        if (singleTokens.includes(req.body.token)) {
-            const indexToRemove = singleTokens.indexOf(req.body.token);
-            singleTokens.splice(indexToRemove, 1);
-            saveTokensToFile(); // Save tokens to tokens.json after removal
-        } else {
-            fs.unlinkSync('.' + videoPath);
-            return res.render('failedToken');
-        }
-    }
 
     await extractFrames({
         input: '.' + videoPath,
@@ -104,7 +94,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
         fs.writeFileSync('./videos.json', JSON.stringify(videos));
     }
 
-    videos.push({ id: req.file.filename, path: videoPath, thumbnail: videoPath + '.png', title: sanitizeHtml(req.body.title), description: sanitizeHtml(req.body.description).replace('\\r\\n', '\\n') });
+    videos.push({ id: req.file.filename, uploader: req.session.name, path: videoPath, thumbnail: videoPath + '.png', title: sanitizeHtml(req.body.title), description: sanitizeHtml(req.body.description).replace('\\r\\n', '\\n') });
     fs.writeFileSync('./videos.json', JSON.stringify(videos));
 
     res.redirect('/videos/' + req.file.filename);
@@ -182,7 +172,7 @@ app.get('/videos/:id', (req, res, next) => {
     if (videoIndex !== -1) {
         const video = videos[videoIndex];
         videos.splice(videoIndex, 1);
-        res.render('watchvideo', { video: video, videos: videos.randoms() });
+        res.render('watchvideo', { video: video, videos: videos.randoms(), uploader: video.uploader });
     } else {
         next();
     }
