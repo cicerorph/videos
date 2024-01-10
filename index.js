@@ -207,9 +207,11 @@ app.get('/api/auth', async (req, res) => {
             app.use(
                 cookieSession({
                     name: 'session',
-                    keys: [data.name],
+                    keys: [data.username],
                 })
             );
+
+            console.log(data.username)
             
             req.session.name = data.username
 
