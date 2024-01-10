@@ -148,9 +148,25 @@ app.get('/videos', (req, res) => {
     res.render('videos', { videos: videos });
 });
 
+// Middleware to check if the user is logged in
+app.use((req, res, next) => {
+    if (req.session && req.session.name) {
+        res.locals.user = req.session.name; // Pass the user's name to all views
+        next();
+    } else {
+        next();
+    }
+});
+
+// Updated route handling for the main page
 app.get('/', (req, res) => {
     const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
-    res.render('videos', { videos: videos });
+    if (res.locals.user) {
+        // Render a different view when the user is logged in
+        res.render('loggedinhome', { user: res.locals.user, videos: videos });
+    } else {
+        res.render('home', { videos: videos });
+    }
 });
 
 app.get('/videos/:id', (req, res, next) => {
@@ -195,6 +211,11 @@ app.get('/api/auth', async (req, res) => {
                     keys: [sessionId],
                 })
             );
+
+            // Set the user's name in the cookie
+            req.session.name = data.name;
+
+            // Redirect to the main page after successful authentication
             res.redirect('https://videos.mubi.tech');
         } else {
             res.status(403).json({ error: 'Authentication failed' });
