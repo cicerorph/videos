@@ -211,7 +211,9 @@ app.get('/api/auth', async (req, res) => {
                 })
             );
 
-            req.session.name = data.name
+            console.log(data)
+            
+            // req.session.name = data.name
 
             // Redirect to the main page after successful authentication
             res.redirect('https://videos.mubi.tech');
