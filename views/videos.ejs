@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uploaded Videos</title>
     <link href="/style.css" rel="stylesheet" />
+    <meta property="og:title" content="Main Page" />
+    <meta property="og:description" content="Videos MubiLop" />
     <style>
         body {
             position: absolute;
@@ -13,7 +16,33 @@
             margin: 10px;
             margin-left: 20px;
         }
-        
+
+        .header {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(29, 29, 29);
+            width: 100%;
+            /* Remove the position: absolute */
+            /* Remove top, right, and z-index properties */
+            /* Remove the box-shadow property if you don't need it */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Optional: Add a subtle shadow for depth */
+            color: #fff;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: rgb(255, 255, 255);
+            transition: all 0.25s;
+            margin-right: 20px;
+        }
+
         .video-wrapper {
             display: inline-block;
             text-align: center;
@@ -23,6 +52,7 @@
             padding: 10px;
             box-shadow: 0 0 5px #000000, 0 0 1px #000000;
             background-color: rgb(44, 44, 44);
+            width:340px;
         }
 
         .video-wrapper:hover {
@@ -43,31 +73,25 @@
             margin-top: 5px;
         }
 
-        a {
-            text-decoration: none;
-            color: rgb(255, 255, 255);
-            transition: all 0.25s;
-        }
-
-        .header {
-            text-align: left;
-            align-items: left;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
+
 <body>
-    <!--<div class="header">
-        <a href="/upload"><h1>Upload Video</h1></a>
-    </div>-->
+    <div class="header">
+        <a href="https://videos.mubi.tech"><h1>videos.mubi.tech</h1></a>
+        <a></a>
+        <a href="/upload">Upload</a>
+        <a href="https://auth.itinerary.eu.org/auth/?redirect=aHR0cHM6Ly92aWRlb3MubXViaS50ZWNoLw==&name=Videos Mubi Tech">Login</a>
+    </div>
     <h1>Uploaded Videos</h1>
     <% videos.forEach(video => { %>
-        <a href="/videos/<%= video.id %>">
-            <div class="video-wrapper">
-                    <img class="video-thumbnail" id="<%= video.thumbnail %>" src="<%= video.thumbnail %>" alt="Video Thumbnail">
-                    <h3 class="video-title" for="<%= video.thumbnail %>"><%= video.title %></h3>
-            </div>
-        </a>
+    <a href="/videos/<%= video.id %>">
+        <div class="video-wrapper">
+            <img class="video-thumbnail" id="<%= video.thumbnail %>" src="<%= video.thumbnail %>" alt="Video Thumbnail">
+            <h3 class="video-title" for="<%= video.thumbnail %>"><%= video.title %></h3>
+        </div>
+    </a>
     <% }); %>
 </body>
+
 </html>
