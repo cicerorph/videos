@@ -8,6 +8,7 @@
     "multer": "^1.4.5-lts.1",
     "pm2": "^5.3.0",
     "sanitize-html": "^2.11.0",
-    "simple-discord-webhooks": "^2.1.0"
+    "simple-discord-webhooks": "^2.1.0",
+    "cookie-session": "2.0.0"
   }
 }
