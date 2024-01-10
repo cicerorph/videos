@@ -7,6 +7,7 @@
     <link href="/style.css" rel="stylesheet" />
     <meta property="og:title" content="Main Page" />
     <meta property="og:description" content="Videos MubiLop" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         body {
             position: absolute;
@@ -87,7 +88,10 @@
     <div class="header">
         <a href="https://videos.mubi.tech"><h1>videos.mubi.tech</h1></a>
         <a><%= user %> <img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"></a> <!-- Replace with actual path -->
-        <a href="/upload">Upload</a>
+        <% if(user == "WojtekGame"){ %>
+            <a>[DEVELOPER]</a>
+        <% } %>
+        <a href="/upload"><span class="material-symbols-outlined">upload</span></a>
         <a href="/logout">Log Out</a>
     </div>
     <h1>Uploaded Videos</h1>
