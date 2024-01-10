@@ -126,10 +126,10 @@
             height: 5px;
         }
 
-        .bottom img {
+        .tramp-image {
             width:30px;
-            height:30px;
             border-radius:50%;
+            margin-right:10px;
         }
     </style>
 </head>
@@ -146,8 +146,7 @@
         <div class="bottom">
             <h3>Description:</h3>
             <pre class="description"><%= video.description %></pre>
-            <h3>Uploader</h3>
-            <a><img src="https://trampoline.turbowarp.org/avatars/by-username/<%= uploader %>" alt="User Image"><%= uploader %></a>
+            <a><class="tramp-image" img src="https://trampoline.turbowarp.org/avatars/by-username/<%= uploader %>" alt="User Image"><%= uploader %></a>
         </div>
     </div>
     <div class="watchother">
