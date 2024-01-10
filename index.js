@@ -9,6 +9,7 @@ const extractFrames = require('ffmpeg-extract-frames');
 const conf = require('./config.json');
 const cookieSession = require('cookie-session') // Add Cookie Session for auth
 const axios = require('axios');
+const { uuid } = require('uuidv4');
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -187,7 +188,7 @@ app.get('/api/auth', async (req, res) => {
         const data = response.data;
 
         if (data.valid === true && data.redirect === 'https://videos.mubi.tech/api/auth') {
-            let sessionId = crypto.randomUUID();
+            let sessionId = uuid();
             app.use(
                 cookieSession({
                     name: 'session',
