@@ -8,6 +8,7 @@ const { Webhook } = require('simple-discord-webhooks');
 const extractFrames = require('ffmpeg-extract-frames');
 const conf = require('./config.json');
 const cookieSession = require('cookie-session') // Add Cookie Session for auth
+const axios = require('axios');
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -178,30 +179,31 @@ app.get('/login', (req, res) => {
     res.redirect(`https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=MubiVideos`);
 });
 
-app.get('/api/auth', (req, res) => {
+app.get('/api/auth', async (req, res) => {
     const { privateCode } = req.query;
 
-    fetch(`https://auth.itinerary.eu.org/api/auth/verifyToken?privateCode=${privateCode}`, { method: 'GET' })
-    .then((response) => response.json())
-    .then((data) => {
-        // The `data` object sent by Scratch Auth will contain notably a `valid` property and a `username` property
-        // If `valid` is `true`, the user has successfully completed authentication process
-        // We also check the redirect location to prevent a malicious site from tricking users into authenticating
-        // to a seemingly innocent portal while in reality logging in to our site.
+    try {
+        const response = await axios.get(`https://auth.itinerary.eu.org/api/auth/verifyToken?privateCode=${privateCode}`);
+        const data = response.data;
+
         if (data.valid === true && data.redirect === 'https://videos.mubi.tech/api/auth') {
-            // Generate a session document for the user and store it in the database
             let sessionId = crypto.randomUUID();
-            app.use(cookieSession({
-              name: 'session',
-              keys: [sessionId]
-            }))
-            res.redirect("https://videos.mubi.tech");
+            app.use(
+                cookieSession({
+                    name: 'session',
+                    keys: [sessionId],
+                })
+            );
+            res.redirect('https://videos.mubi.tech');
         } else {
-            // Respond to the client with an error
             res.status(403).json({ error: 'Authentication failed' });
         }
-    });
+    } catch (error) {
+        console.error('Error during authentication:', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
+
 
 
 app.use((req, res) => {
