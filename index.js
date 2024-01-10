@@ -80,6 +80,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     const videoPath = '/uploads/' + req.file.filename;
     if (!req.session.name) {
         res.send("Not logged in")
+        return;
     }
 
     await extractFrames({
