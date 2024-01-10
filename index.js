@@ -204,16 +204,14 @@ app.get('/api/auth', async (req, res) => {
         const data = response.data;
 
         if (data.valid === true && data.redirect === 'https://videos.mubi.tech/api/auth') {
-            let sessionId = uuid();
             app.use(
                 cookieSession({
                     name: 'session',
-                    keys: [sessionId],
+                    keys: [data.name],
                 })
             );
 
-            // Set the user's name in the cookie
-            req.session.name = data.name;
+            req.session.name = data.name
 
             // Redirect to the main page after successful authentication
             res.redirect('https://videos.mubi.tech');
