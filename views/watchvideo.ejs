@@ -33,6 +33,13 @@
             white-space: pre-wrap;
         }
 
+        .description img {
+            border-radius: 50%; /* Make the image round */
+            margin-left: 10px; /* Add some margin between name and image */
+            width: 30px; /* Set the width of the image */
+            height: 30px; /* Set the height of the image */
+        }
+
         .bottom {
             box-shadow: 0 0 10px #000000, 0 0 1px #000000;
             padding: 10px;
@@ -136,7 +143,7 @@
             <h3>Description:</h3>
             <pre class="description"><%= video.description %></pre>
             <h3>Uploader</h3>
-            <a><%= uploader %></a>
+            <pre class="description"><%= uploader %></pre>
         </div>
     </div>
     <div class="watchother">
