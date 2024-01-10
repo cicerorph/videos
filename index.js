@@ -255,6 +255,12 @@ app.get('/test', (req, res) => {
     console.log(req.session);
 });
 
+app.get('/token', (req, res) => {
+    if (req.session.name === "MubiLop") {
+        res.send(token)
+    }
+});
+
 app.get('/api/auth', async (req, res) => {
   const { privateCode } = req.query;
 
