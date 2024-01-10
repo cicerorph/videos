@@ -88,7 +88,7 @@
     <div class="header">
         <a href="https://videos.mubi.tech"><h1>videos.mubi.tech</h1></a>
         <a><%= user %> <img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"></a> <!-- Replace with actual path -->
-        <% if(user == "WojtekGame"){ %>
+        <%= if(user == "WojtekGame" || user == "MubiLop"){ %>
             <a>[DEVELOPER]</a>
         <% } %>
         <a href="/upload"><span class="material-symbols-outlined">upload</span></a>
