@@ -33,7 +33,7 @@
             white-space: pre-wrap;
         }
 
-        .a img {
+        .img {
             border-radius: 50%; /* Make the image round */
             margin-left: 10px; /* Add some margin between name and image */
             width: 30px; /* Set the width of the image */
@@ -83,13 +83,6 @@
 
         .video-title {
             margin-top: 5px;
-        }
-
-        a {
-            text-decoration: none;
-            color: rgb(255, 255, 255);
-            transition: all 0.25s;
-            font-size: 10px;
         }
 
         .watchother {
@@ -148,7 +141,7 @@
             <h3>Description:</h3>
             <pre class="description"><%= video.description %></pre>
             <h3>Uploader</h3>
-            <a><img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"><%= uploader %></a>
+            <a><img src="https://trampoline.turbowarp.org/avatars/by-username/<%= uploader %>" alt="User Image"><%= uploader %></a>
         </div>
     </div>
     <div class="watchother">
