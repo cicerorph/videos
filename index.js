@@ -7,7 +7,7 @@ const sanitizeHtml = require('sanitize-html');
 const { Webhook } = require('simple-discord-webhooks');
 const extractFrames = require('ffmpeg-extract-frames');
 const conf = require('./config.json');
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session') // Add Cookie Session for auth
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
