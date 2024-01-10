@@ -192,10 +192,23 @@ app.get('/generateToken', (req, res) => {
     if (req.query.token !== token) {
         return res.render('failedToken');
     }
-    const generatedToken = crypto.randomBytes(8).toString('hex');
-    singleTokens.push(generatedToken);
+
+    const manyTokens = parseInt(req.query.many) || 1; // Default to 1 if 'many' parameter is not provided
+
+    if (isNaN(manyTokens) || manyTokens <= 0) {
+        return res.status(400).send('Invalid value for "many" parameter');
+    }
+
+    const generatedTokens = Array.from({ length: manyTokens }, () => crypto.randomBytes(8).toString('hex'));
+    
+    singleTokens.push(...generatedTokens);
     saveTokensToFile();
-    res.send(generatedToken);
+    
+    if (manyTokens === 1) {
+        res.send(generatedTokens[0]);
+    } else {
+        res.send(generatedTokens);
+    }
 });
 
 app.get('/login', (req, res) => {
