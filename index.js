@@ -8,7 +8,7 @@ const { Webhook } = require('simple-discord-webhooks');
 const extractFrames = require('ffmpeg-extract-frames');
 const conf = require('./config.json');
 const cookieSession = require('cookie-session') // Add Cookie Session for auth
-const axios = require('jest-mock-axios');
+const axios = require('axios');
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
