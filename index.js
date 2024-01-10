@@ -176,7 +176,7 @@ app.get('/generateToken', (req, res) => {
 app.get('/login', (req, res) => {
     let redirectLocation = new Buffer('https://videos.mubi.tech/api/auth').toString('base64');
     res.redirect(`https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=MubiVideos`);
-}
+});
 
 app.get('/api/auth', (req, res) => {
     const { privateCode } = req.query;
@@ -200,7 +200,7 @@ app.get('/api/auth', (req, res) => {
             // Respond to the client with an error
             res.status(403).json({ error: 'Authentication failed' });
         }
-}
+});
 
 
 app.use((req, res) => {
