@@ -137,6 +137,57 @@ app.post('/delete', async (req, res) => {
     res.render('videodeleted');
 });  
 
+app.post('/delete', (req, res) => {
+    const videoId = req.body.id;
+    const Uptoken = req.body.token;
+
+    if (!Uptoken === token) {
+        res.render("failedToken");
+        return;
+    }
+
+    // Load existing videos from videos.json
+    const videosPath = './videos.json';
+    let videos = [];
+
+    try {
+        const videosFileContent = fs.readFileSync(videosPath, 'utf8');
+        videos = JSON.parse(videosFileContent);
+    } catch (err) {
+        console.error('Error reading videos file:', err);
+        res.status(500).send('Internal Server Error');
+        return;
+    }
+
+    // Find the index of the video to be deleted
+    const videoIndex = videos.findIndex(video => video.id === videoId);
+
+    if (videoIndex !== -1) {
+        // Delete the video file from the uploads folder
+        const videoPath = path.join(__dirname, 'uploads', videos[videoIndex]);
+        const thumbnailPath = path.join(__dirname, 'uploads', videos[videoIndex], '.png');
+
+        try {
+            fs.unlinkSync(videoPath);
+            fs.unlinkSync(thumbnailPath);
+        } catch (err) {
+            console.error('Error deleting video file:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        // Remove the video entry from videos.json
+        videos.splice(videoIndex, 1);
+
+        // Save the updated videos array to videos.json
+        fs.writeFileSync(videosPath, JSON.stringify(videos));
+
+        res.redirect('/');
+    } else {
+        res.status(404).render('error', { error: 'Video not found' });
+    }
+});
+
 app.get('/upload', (req, res) => {
     res.render('upload');
 });
