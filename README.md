@@ -1,2 +1,2 @@
 # video-site
-Host this with nodejs
+go to https://github.com/cicerorph/videosweb 
