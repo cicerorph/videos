@@ -10,8 +10,10 @@ const conf = require('./config.json');
 const cookieSession = require('cookie-session') // Add Cookie Session for auth
 const axios = require('axios');
 const { uuid } = require('uuidv4');
+const cors = require('cors')
 
 const app = express();
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
