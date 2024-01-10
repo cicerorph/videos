@@ -196,35 +196,37 @@ app.get('/login', (req, res) => {
     res.redirect(`https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=MubiVideos`);
 });
 
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: [conf.SECRET], // Add your secret key(s) here
+  })
+);
+
 app.get('/api/auth', async (req, res) => {
-    const { privateCode } = req.query;
+  const { privateCode } = req.query;
 
-    try {
-        const response = await axios.get(`https://auth.itinerary.eu.org/api/auth/verifyToken?privateCode=${privateCode}`);
-        const data = response.data;
+  try {
+    const response = await axios.get(`https://auth.itinerary.eu.org/api/auth/verifyToken?privateCode=${privateCode}`);
+    const data = response.data;
 
-        if (data.valid === true && data.redirect === 'https://videos.mubi.tech/api/auth') {
-            app.use(
-                cookieSession({
-                    name: 'session',
-                    keys: [data.username],
-                })
-            );
+    if (data.valid === true && data.redirect === 'https://videos.mubi.tech/api/auth') {
+      console.log(data.username);
 
-            console.log(data.username)
-            
-            req.session.name = data.username
+      // Now you can safely access req.session
+      req.session.name = data.username;
 
-            // Redirect to the main page after successful authentication
-            res.redirect('https://videos.mubi.tech');
-        } else {
-            res.status(403).json({ error: 'Authentication failed' });
-        }
-    } catch (error) {
-        console.error('Error during authentication:', error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+      // Redirect to the main page after successful authentication
+      res.redirect('https://videos.mubi.tech');
+    } else {
+      res.status(403).json({ error: 'Authentication failed' });
     }
+  } catch (error) {
+    console.error('Error during authentication:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 
 
