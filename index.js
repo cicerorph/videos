@@ -197,7 +197,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/test', (req, res) => {
-    res.send(req.session.name);
+    res.send(req.session);
 });
 
 app.use(
