@@ -195,7 +195,7 @@ app.get('/', (req, res) => {
     const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
     if (res.locals.user) {
         // Render a different view when the user is logged in
-        res.render('loggedinhome', { user: res.locals.user, videos: videos });
+        res.render('loggedinhome', { user: res.locals.user, videos: videos, async: true });
     } else {
         res.render('home', { videos: videos });
     }
