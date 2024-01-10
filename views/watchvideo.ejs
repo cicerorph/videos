@@ -33,11 +33,16 @@
             white-space: pre-wrap;
         }
 
-        .description img {
+        .a img {
             border-radius: 50%; /* Make the image round */
             margin-left: 10px; /* Add some margin between name and image */
             width: 30px; /* Set the width of the image */
             height: 30px; /* Set the height of the image */
+        }
+
+        .a {
+            text-align: left;
+            white-space: pre-wrap;
         }
 
         .bottom {
@@ -143,7 +148,7 @@
             <h3>Description:</h3>
             <pre class="description"><%= video.description %></pre>
             <h3>Uploader</h3>
-            <pre class="description"><%= uploader %></pre>
+            <a><img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"><%= uploader %></a>
         </div>
     </div>
     <div class="watchother">
