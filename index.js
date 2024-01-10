@@ -7,6 +7,7 @@ const sanitizeHtml = require('sanitize-html');
 const { Webhook } = require('simple-discord-webhooks');
 const extractFrames = require('ffmpeg-extract-frames');
 const conf = require('./config.json');
+const cookieSession = require('cookie-session')
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -171,6 +172,36 @@ app.get('/generateToken', (req, res) => {
     saveTokensToFile();
     res.send(generatedToken);
 });
+
+app.get('/login', (req, res) => {
+    let redirectLocation = new Buffer('https://videos.mubi.tech/api/auth').toString('base64');
+    res.redirect(`https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=MubiVideos`);
+}
+
+app.get('/api/auth', (req, res) => {
+    const { privateCode } = req.query;
+
+    fetch(`https://auth.itinerary.eu.org/api/auth/verifyToken?privateCode=${privateCode}`, { method: 'GET' })
+    .then((response) => response.json())
+    .then((data) => {
+        // The `data` object sent by Scratch Auth will contain notably a `valid` property and a `username` property
+        // If `valid` is `true`, the user has successfully completed authentication process
+        // We also check the redirect location to prevent a malicious site from tricking users into authenticating
+        // to a seemingly innocent portal while in reality logging in to our site.
+        if (data.valid === true && data.redirect === 'https://videos.mubi.tech/api/auth') {
+            // Generate a session document for the user and store it in the database
+            let sessionId = crypto.randomUUID();
+            app.use(cookieSession({
+              name: 'session',
+              keys: [sessionId]
+            }))
+            res.redirect("https://videos.mubi.tech");
+        } else {
+            // Respond to the client with an error
+            res.status(403).json({ error: 'Authentication failed' });
+        }
+}
+
 
 app.use((req, res) => {
     res.status(404).render('error');
