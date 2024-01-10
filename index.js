@@ -106,37 +106,6 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     webhook.send(`**A video got uploaded**\nLink: [CLICK HERE](https://videos.mubi.tech/videos/${req.file.filename})`);
 });
 
-app.post('/delete', async (req, res) => {
-    console.log(req.body)
-    // Check if req.body is defined
-    if (!req.body || !req.body.id || req.body.token !== token) {
-      return res.render('failedToken');
-    }
-  
-    const videoId = req.body.id;
-  
-    // Delete video from videos.json
-    const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
-    const videoIndex = videos.findIndex(video => video.id === videoId);
-    if (videoIndex !== -1) {
-      videos.splice(videoIndex, 1);
-      fs.writeFileSync('./videos.json', JSON.stringify(videos));
-    }
-  
-    const videoFilePath1 = `./uploads/${videoId}`;
-    if (fs.existsSync(videoFilePath1)) {
-      fs.unlinkSync(videoFilePath1);
-    }
-  
-    // Delete video file with extension "id.png"
-    const videoFilePath2 = `./uploads/${videoId}.png`;
-    if (fs.existsSync(videoFilePath2)) {
-      fs.unlinkSync(videoFilePath2);
-    }
-  
-    res.render('videodeleted');
-});  
-
 app.post('/delete', (req, res) => {
     const videoId = req.body.id;
     const Uptoken = req.body.token;
