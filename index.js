@@ -203,6 +203,11 @@ app.get('/login', (req, res) => {
     res.redirect(`https://auth.itinerary.eu.org/auth/?redirect=${redirectLocation}&name=MubiVideos`);
 });
 
+app.get('/logout', (req, res) => {
+    req.session = null
+    res.redirect("https://videos.mubi.tech/videos")
+});
+
 app.get('/test', (req, res) => {
     res.send(req.session);
     console.log(req.session);
