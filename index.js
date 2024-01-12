@@ -28,7 +28,7 @@ Array.prototype.randoms = function () {
 };
 
 const upload = multer({
-    limits: { fileSize: 100 * 1024 * 1024 },
+    limits: { fileSize: 20 * 1024 * 1024 },
     fileFilter: function (req, file, cb) {
         if (!file.mimetype.startsWith('video/')) {
             return cb(new Error('You need to upload a video matey'));
