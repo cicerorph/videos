@@ -9,10 +9,11 @@ There are also projects that the gamine project might also have:
 <!------------------------------------>
 |            Features        | Status |
 | -------------------------- | ------ |
-|             Login          |   ✖️   |
+|             Login          |   ✅   |
 |             Server         |   ✅   |
 |    Recomendation system    |   ✖️   |
-|          Scratch Auth      |   🛠   |
+|          Scratch Auth      |   ✅   |
+|          Comments          |   ❔   |
 <!------------------------------------->
 ---
 * ✔️: **Made, and can be more developed :)**
