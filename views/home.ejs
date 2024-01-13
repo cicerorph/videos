@@ -8,6 +8,7 @@
     <meta property="og:title" content="Main Page" />
     <meta property="og:description" content="Videos MubiLop" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
     <style>
         body {
             position: absolute;
@@ -85,20 +86,27 @@
 </head>
 
 <body>
-    <div class="header">
-        <a href="https://videos.mubi.tech"><h1>videos.mubi.tech</h1></a>
-        <a href="/upload"><span class="material-symbols-outlined">upload</span></a>
-        <a href="/login">Login</a>
-    </div>
-    <h1>Uploaded Videos</h1>
-    <% videos.forEach(video => { %>
-    <a href="/videos/<%= video.id %>">
-        <div class="video-wrapper">
-            <img class="video-thumbnail" id="<%= video.thumbnail %>" src="<%= video.thumbnail %>" alt="Video Thumbnail">
-            <h3 class="video-title" for="<%= video.thumbnail %>"><%= video.title %></h3>
+    <section data-scrollbar>
+        <div class="header">
+            <a href="https://videos.mubi.tech"><h1>videos.mubi.tech</h1></a>
+            <a href="/upload"><span class="material-symbols-outlined">upload</span></a>
+            <a href="/login">Login</a>
         </div>
-    </a>
-    <% }); %>
+        <h1>Uploaded Videos</h1>
+        <% videos.forEach(video => { %>
+        <a href="/videos/<%= video.id %>">
+            <div class="video-wrapper">
+                <img class="video-thumbnail" id="<%= video.thumbnail %>" src="<%= video.thumbnail %>" alt="Video Thumbnail">
+                <h3 class="video-title" for="<%= video.thumbnail %>"><%= video.title %></h3>
+            </div>
+        </a>
+        <% }); %>
+    </section>
+
+    <script src="dist/smooth-scrollbar.js"></script>
+
+    <script> Scrollbar.initAll(); </script>
+    
 </body>
 
 </html>
