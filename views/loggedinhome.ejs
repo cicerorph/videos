@@ -97,11 +97,10 @@
         <% } else { %>
             <img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"></a>
         <% } %>
-        <div> <!-- Don't make icons seperated, make them be a little squished -->
+        <!-- Don't make icons seperated in a large amount of space, make them be a little squished, IF POSSIBLE -->
             <a><span class="material-symbols-outlined">camera</span></a>
             <a href="/upload"><span class="material-symbols-outlined">upload</span></a>
             <a href="/logout"><span class="material-symbols-outlined">logout</span></a>
-        <div>
     </div>
     <h1>Uploaded Videos</h1>
     <% videos.forEach(video => { %>
