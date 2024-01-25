@@ -81,17 +81,24 @@
             margin-top: 5px;
         }
 
+        #rotate{
+            rotate: 180deg;
+        }
+
     </style>
 </head>
 
 <body>
     <div class="header">
         <a href="https://videos.mubi.tech"><h1>videos.mubi.tech</h1></a>
-        <a><%= user %> <img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"></a> <!-- Replace with actual path -->
-        <a>Studio</a>
+        <a><%= user %>
         <% if(user == "WojtekGame" || user == "MubiLop" || user == "PuzzlingGGG") { %>
-            <a>[DEVELOPER]</a>
+            <img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"></a> <!-- Replace with actual path -->
+        <% } else { %>
+            <img src="https://trampoline.turbowarp.org/avatars/by-username/<%= user %>" alt="User Image"></a>
         <% } %>
+        <a>Studio</a>
+        
         <a href="/upload"><span class="material-symbols-outlined">upload</span></a>
         <a href="/logout"><span class="material-symbols-outlined">logout</span></a>
     </div>
