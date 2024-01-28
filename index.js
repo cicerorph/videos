@@ -183,6 +183,22 @@ app.get('/videos/:id', (req, res, next) => {
     }
 });
 
+app.get('/shorts/:id', (req, res, next) => {
+    const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
+    const videoIndex = videos.findIndex(video => video.id === req.params.id);
+    if (videoIndex !== -1) {
+        const video = videos[videoIndex];
+        videos.splice(videoIndex, 1);
+        if (video.uploader === undefined) {
+            video.uploader === "Unknown"
+        }
+        
+        res.render('shorts', { video: video, videos: videos.randoms(), uploader: video.uploader });
+    } else {
+        next();
+    }
+});
+
 app.get('/generateToken', (req, res) => {
     if (req.query.token !== token) {
         return res.render('failedToken');
@@ -250,9 +266,6 @@ app.get('/api/auth', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
 
 app.use((req, res) => {
     res.status(404).render('error');
