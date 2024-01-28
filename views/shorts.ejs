@@ -26,6 +26,8 @@
         .video-js {
             width: 480px;
             height: 854px;
+            width: 50%;
+            height:100%;
         }
 
         .description {
@@ -155,7 +157,7 @@
             <h1 style="text-align: center;">Watch other videos</h1>
         </a>
         <% videos.slice(-3).forEach(video => { %>
-            <a href="/videos/<%= video.id %>">
+            <a href="/shorts/<%= video.id %>">
                 <div class="video-wrapper">
                     <img class="video-thumbnail" id="<%= video.thumbnail %>" src="<%= video.thumbnail %>" alt="Video Thumbnail">
                     <h3 class="video-title" for="<%= video.thumbnail %>">
