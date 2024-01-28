@@ -19,3 +19,4 @@ There are also projects that the gamine project might also have:
 * ✔️: **Made, and can be more developed :)**
 * ✖️: **Unfinished, can also not be in the repository, unless it is, it needs more development!**
 * 🛠: **Working on it**
+* ❔: **idk might or might not add it**
