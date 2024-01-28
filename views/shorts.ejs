@@ -24,8 +24,8 @@
         }
 
         .video-js {
-            width: 480px;
-            height: 854px;
+            width: calc(480px/2);
+            height: calc(854px/2);
         }
 
         .description {
@@ -93,7 +93,9 @@
 
         .title {
             text-align: center;
-            margin-top:25px;
+            bottom: 0;
+            z-index: 100;
+            position: absolute;
         }
 
         .menu {
