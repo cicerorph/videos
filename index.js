@@ -79,9 +79,44 @@ app.use(
 
 
 app.post('/upload', upload.single('video'), async (req, res) => {
-    res.status(400).send("No more videos sowwy!");
-});
+    const videoPath = '/uploads/' + req.file.filename;
+    if (!req.session.name) {
+        res.send("Not logged in");
+        return;
+    }
 
+    await extractFrames({
+        input: '.' + videoPath,
+        output: '.' + videoPath + '.png',
+        offsets: [0],
+    });
+
+    const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
+    const videoIndex = videos.findIndex(video => video.id === req.file.filename);
+
+    if (videoIndex !== -1) {
+        videos.splice(videoIndex, 1);
+        fs.writeFileSync('./videos.json', JSON.stringify(videos));
+    }
+
+    const title = sanitizeHtml(req.body.title).trim().substring(0, 30); // Trim and limit to 100 characters
+    const description = sanitizeHtml(req.body.description).trim().replace(/\\r\\n/g, '\\n').substring(0, 100); // Trim and limit to 500 characters
+
+    videos.push({
+        id: req.file.filename,
+        uploader: req.session.name,
+        path: videoPath,
+        thumbnail: videoPath + '.png',
+        title: title,
+        description: description,
+    });
+
+    fs.writeFileSync('./videos.json', JSON.stringify(videos));
+
+    res.redirect('/videos/' + req.file.filename);
+
+    webhook.send(`**A video got uploaded**\nLink: [CLICK HERE](https://videos.mubi.tech/videos/${req.file.filename})`);
+});
 
 app.post('/delete', (req, res) => {
     const videoId = req.body.id;
