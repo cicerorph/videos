@@ -11,6 +11,9 @@ const cookieSession = require('cookie-session') // Add Cookie Session for auth
 const axios = require('axios');
 const { uuid } = require('uuidv4');
 const cors = require('cors')
+const BunnyStorage = require('bunnycdn-storage').default;
+
+const bunnyStorage = new BunnyStorage(process.env.BUNNY_STORAGE_API_KEY, process.env.BUNNY_STORAGE_ZONE_NAME);
 
 const app = express();
 app.use(cors());
@@ -27,6 +30,9 @@ Array.prototype.randoms = function () {
     return result.slice(0, 3);
 };
 
+// Upload middleware using multer
+const storage = multer.memoryStorage(); // We use memory storage since we're uploading directly to BunnyCDN
+
 const upload = multer({
     limits: { fileSize: 20 * 1024 * 1024 },
     fileFilter: function (req, file, cb) {
@@ -35,15 +41,7 @@ const upload = multer({
         }
         cb(null, true);
     },
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, 'uploads/');
-        },
-        filename: (req, file, cb) => {
-            const randomHash = crypto.randomBytes(8).toString('hex');
-            const ext = path.extname(file.originalname);
-            cb(null, randomHash + ext);
-        },
+    storage: storage
     }),
 });
 
@@ -77,45 +75,73 @@ app.use(
   })
 );
 
+const sanitizeHtml = require('sanitize-html');
+const extractFrames = require('ffmpeg-extract-frames');
+const { Webhook } = require('discord-webhook-node'); // Assuming you have this package installed
+const webhook = new Webhook("YOUR_DISCORD_WEBHOOK_URL");
 
+// fuck u bunny
 app.post('/upload', upload.single('video'), async (req, res) => {
-    const videoPath = '/uploads/' + req.file.filename;
     if (!req.session.name) {
-        res.send("Not logged in");
-        return;
+        return res.send("Not logged in");
     }
 
-    await extractFrames({
-        input: '.' + videoPath,
-        output: '.' + videoPath + '.png',
-        offsets: [0],
-    });
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+
+    // Generate a unique filename for the video
+    const videoId = Date.now() + path.extname(req.file.originalname);
+
+    // Upload the video to BunnyCDN
+    const videoPath = `videos/${videoId}`;
+    try {
+        await bunnyStorage.upload(req.file.buffer, videoPath);
+    } catch (error) {
+        console.error('Error uploading video to BunnyCDN:', error);
+        return res.status(500).send('Error uploading video.');
+    }
+
+    // Extract a frame for the thumbnail
+    const thumbnailPath = `thumbnails/${videoId}.png`;
+    try {
+        await extractFrames({
+            input: req.file.buffer,
+            output: `./temp-thumbnail.png`,
+            offsets: [0]
+        });
+
+        // Upload the thumbnail to BunnyCDN
+        const thumbnailBuffer = fs.readFileSync('./temp-thumbnail.png');
+        await bunnyStorage.upload(thumbnailBuffer, thumbnailPath);
+        fs.unlinkSync('./temp-thumbnail.png'); // Delete the temporary file
+    } catch (error) {
+        console.error('Error creating or uploading thumbnail:', error);
+        return res.status(500).send('Error processing thumbnail.');
+    }
 
     const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
-    const videoIndex = videos.findIndex(video => video.id === req.file.filename);
+    const title = sanitizeHtml(req.body.title).trim().substring(0, 30);
+    const description = sanitizeHtml(req.body.description).trim().replace(/\r\n/g, '\n').substring(0, 100);
 
-    if (videoIndex !== -1) {
-        videos.splice(videoIndex, 1);
-        fs.writeFileSync('./videos.json', JSON.stringify(videos));
-    }
-
-    const title = sanitizeHtml(req.body.title).trim().substring(0, 30); // Trim and limit to 100 characters
-    const description = sanitizeHtml(req.body.description).trim().replace(/\\r\\n/g, '\\n').substring(0, 100); // Trim and limit to 500 characters
+    // Construct the BunnyCDN URL for the video and thumbnail files
+    const bunnyCdnVideoUrl = `https://${process.env.BUNNY_STORAGE_ZONE_NAME}.b-cdn.net/${videoPath}`;
+    const bunnyCdnThumbnailUrl = `https://${process.env.BUNNY_STORAGE_ZONE_NAME}.b-cdn.net/${thumbnailPath}`;
 
     videos.push({
-        id: req.file.filename,
+        id: videoId,
         uploader: req.session.name,
-        path: videoPath,
-        thumbnail: videoPath + '.png',
+        url: bunnyCdnVideoUrl,
+        thumbnail: bunnyCdnThumbnailUrl,
         title: title,
         description: description,
     });
 
     fs.writeFileSync('./videos.json', JSON.stringify(videos));
 
-    res.redirect('/videos/' + req.file.filename);
+    res.redirect(`/videos/${videoId}`);
 
-    webhook.send(`**A video got uploaded**\nLink: [CLICK HERE](https://videos.mubi.tech/videos/${req.file.filename})`);
+    webhook.send(`**A video got uploaded**\nTitle: ${title}\nLink: [CLICK HERE](https://videos.mubi.tech/videos/${videoId})`);
 });
 
 app.post('/delete', (req, res) => {
