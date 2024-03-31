@@ -99,6 +99,14 @@ app.post('/upload', upload.single('video'), async (req, res) => {
         return res.status(500).send('Error saving video.');
     }
 
+    const videoPath = `videos/${videoId}.mp4`;
+    try {
+        await bunnyStorage.upload(req.file.buffer, videoPath);
+    } catch (error) {
+        console.error('Error uploading video to BunnyCDN:', error);
+        return res.status(500).send('Error uploading video.');
+    }
+
     // Extract a frame for the thumbnail
     const thumbnailPath = `thumbnails/${videoId}.png`;
     try {
@@ -112,6 +120,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
         const thumbnailBuffer = fs.readFileSync('./temp-thumbnail.png');
         await bunnyStorage.upload(thumbnailBuffer, thumbnailPath);
         fs.unlinkSync('./temp-thumbnail.png'); // Delete the temporary thumbnail file
+        fs.unlinkSync(localVideoPath); // Delete the temporary thumbnail file
     } catch (error) {
         console.error('Error creating or uploading thumbnail:', error);
         return res.status(500).send('Error processing thumbnail.');
