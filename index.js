@@ -152,7 +152,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
 
     webhook.send(`**A video got uploaded**\nTitle: ${title}\nLink: [CLICK HERE](https://videos.mubi.tech/videos/${videoId})`);
 
-    *\
+    */
 });
 
 app.post('/delete', (req, res) => {
@@ -182,12 +182,12 @@ app.post('/delete', (req, res) => {
 
     if (videoIndex !== -1) {
         // Delete the video file from the uploads folder
-        const videoPath = path.join(__dirname, 'uploads', videos[videoIndex]);
-        const thumbnailPath = path.join(__dirname, 'uploads', videos[videoIndex], '.png');
+        const videoPath = 'videos/' + videos[videoIndex];
+        const thumbnailPath = 'thumbnails/' + videos[videoIndex] + '.png';
 
         try {
-            fs.unlinkSync(videoPath);
-            fs.unlinkSync(thumbnailPath);
+            bunnyStorage.delete(videoPath);
+            bunnyStorage.delete(thumbnailPath);
         } catch (err) {
             console.error('Error deleting video file:', err);
             res.status(500).send('Internal Server Error');
