@@ -89,21 +89,21 @@ app.post('/upload', upload.single('video'), async (req, res) => {
 
     // Generate a unique filename for the video
     const videoId = Date.now() + path.extname(req.file.originalname);
+    const localVideoPath = `./local-videos/${videoId}`; // Local path to save video
 
-    // Upload the video to BunnyCDN
-    const videoPath = `videos/${videoId}`;
+    // Save the video file locally
     try {
-        await bunnyStorage.upload(req.file.buffer, videoPath);
+        fs.writeFileSync(localVideoPath, req.file.buffer);
     } catch (error) {
-        console.error('Error uploading video to BunnyCDN:', error);
-        return res.status(500).send('Error uploading video.');
+        console.error('Error saving video locally:', error);
+        return res.status(500).send('Error saving video.');
     }
 
     // Extract a frame for the thumbnail
     const thumbnailPath = `thumbnails/${videoId}.png`;
     try {
         await extractFrames({
-            input: req.file.buffer,
+            input: localVideoPath,
             output: `./temp-thumbnail.png`,
             offsets: [0]
         });
@@ -111,10 +111,13 @@ app.post('/upload', upload.single('video'), async (req, res) => {
         // Upload the thumbnail to BunnyCDN
         const thumbnailBuffer = fs.readFileSync('./temp-thumbnail.png');
         await bunnyStorage.upload(thumbnailBuffer, thumbnailPath);
-        fs.unlinkSync('./temp-thumbnail.png'); // Delete the temporary file
+        fs.unlinkSync('./temp-thumbnail.png'); // Delete the temporary thumbnail file
     } catch (error) {
         console.error('Error creating or uploading thumbnail:', error);
         return res.status(500).send('Error processing thumbnail.');
+    } finally {
+        // Delete the local video file regardless of the outcome
+        fs.unlinkSync(localVideoPath);
     }
 
     const videos = JSON.parse(fs.readFileSync('./videos.json', 'utf8'));
