@@ -20,6 +20,7 @@ const bunnyStorage = new BunnyStorage(process.env.BUNNY_STORAGE_ACCESS_KEY, proc
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.set('view engine', 'ejs');
