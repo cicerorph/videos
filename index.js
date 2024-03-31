@@ -99,7 +99,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
         return res.status(500).send('Error saving video.');
     }
 
-    const videoPath = `videos/${videoId}.mp4`;
+    const videoPath = `videos/${videoId}`;
     try {
         await bunnyStorage.upload(req.file.buffer, videoPath);
     } catch (error) {
