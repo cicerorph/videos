@@ -74,11 +74,6 @@ app.use(
   })
 );
 
-const sanitizeHtml = require('sanitize-html');
-const extractFrames = require('ffmpeg-extract-frames');
-const { Webhook } = require('discord-webhook-node'); // Assuming you have this package installed
-const webhook = new Webhook("YOUR_DISCORD_WEBHOOK_URL");
-
 // fuck u bunny
 app.post('/upload', upload.single('video'), async (req, res) => {
     if (!req.session.name) {
