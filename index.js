@@ -79,7 +79,8 @@ app.use(
 
 // fuck u bunny
 app.post('/upload', upload.single('video'), async (req, res) => {
-    if (!req.session.name) {
+    return res.status(400).send("Not accepting videos.");
+    /* if (!req.session.name) {
         return res.send("Not logged in");
     }
 
@@ -150,6 +151,8 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     res.redirect(`/videos/${videoId}`);
 
     webhook.send(`**A video got uploaded**\nTitle: ${title}\nLink: [CLICK HERE](https://videos.mubi.tech/videos/${videoId})`);
+
+    *\
 });
 
 app.post('/delete', (req, res) => {
