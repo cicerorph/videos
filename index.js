@@ -120,7 +120,6 @@ app.post('/upload', upload.single('video'), async (req, res) => {
         const thumbnailBuffer = fs.readFileSync('./temp-thumbnail.png');
         await bunnyStorage.upload(thumbnailBuffer, thumbnailPath);
         fs.unlinkSync('./temp-thumbnail.png'); // Delete the temporary thumbnail file
-        fs.unlinkSync(localVideoPath); // Delete the temporary thumbnail file
     } catch (error) {
         console.error('Error creating or uploading thumbnail:', error);
         return res.status(500).send('Error processing thumbnail.');
