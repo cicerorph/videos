@@ -14,7 +14,7 @@ const { uuid } = require('uuidv4');
 const cors = require('cors')
 const BunnyStorage = require('bunnycdn-storage').default;
 
-const bunnyStorage = new BunnyStorage(process.env.BUNNY_STORAGE_API_KEY, process.env.BUNNY_STORAGE_ZONE_NAME);
+const bunnyStorage = new BunnyStorage(process.env.BUNNY_STORAGE_ACCESS_KEY, process.env.BUNNY_STORAGE_ZONE_NAME);
 
 const app = express();
 app.use(cors());
