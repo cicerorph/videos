@@ -6,13 +6,11 @@
     <link href="https://vjs.zencdn.net/8.9.0/video-js.css" rel="stylesheet" />
     <link href="/style.css" rel="stylesheet" />
     <meta property="og:title" content="<%= video.title %>" />
-    <meta property="og:description" content="<%= video.description %>" />
-    <meta property="og:url" content="https://videos.mubi.tech/" />
-    <meta property="twitter:image" content="https://videos.mubi.tech/uploads/<%= video.id %>.png" />
-    <meta name="twitter:card" content="summary_large_image">
+    <meta content="MubiVideos - <% video.title %> - Uploaded by: <%= uploader %>" property="og:title">
+    <meta property="og:type" content="video.movie">
+    <meta property="twitter:player" content="<% video.url %>">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <title>
-        <%= video.title %> | videos.mubi.tech</title>
+    <title>MubiVideos | <%= video.title %></title>
     <style>
         body {
             display: flex;
