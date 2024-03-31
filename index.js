@@ -156,7 +156,7 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     */
 });
 
-app.post('/delete', (req, res) => {
+app.post('/remove', (req, res) => {
     const videoId = req.body.id;
     const Uptoken = req.body.token;
 
