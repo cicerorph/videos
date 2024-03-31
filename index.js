@@ -42,7 +42,6 @@ const upload = multer({
         cb(null, true);
     },
     storage: storage
-    }),
 });
 
 const tokensFilePath = path.join(__dirname, 'tokens.json');
