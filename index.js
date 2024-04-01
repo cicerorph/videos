@@ -156,6 +156,28 @@ app.post('/upload', upload.single('video'), async (req, res) => {
     */
 });
 
+app.get('/upload', (req, res) => {
+    res.render('upload');
+});
+
+app.get('/delete', (req, res) => {
+    res.render('deletevideo');
+});
+
+app.get('/videos', (req, res) => {
+    res.redirect("https://videos.mubi.tech/")
+});
+
+// Middleware to check if the user is logged in
+app.use((req, res, next) => {
+    if (req.session && req.session.name) {
+        res.locals.user = req.session.name; // Pass the user's name to all views
+        next();
+    } else {
+        next();
+    }
+});
+
 app.post('/remove', (req, res) => {
     const videoId = req.body.id;
     const Uptoken = req.body.token;
@@ -207,27 +229,6 @@ app.post('/remove', (req, res) => {
     }
 });
 
-app.get('/upload', (req, res) => {
-    res.render('upload');
-});
-
-app.get('/delete', (req, res) => {
-    res.render('deletevideo');
-});
-
-app.get('/videos', (req, res) => {
-    res.redirect("https://videos.mubi.tech/")
-});
-
-// Middleware to check if the user is logged in
-app.use((req, res, next) => {
-    if (req.session && req.session.name) {
-        res.locals.user = req.session.name; // Pass the user's name to all views
-        next();
-    } else {
-        next();
-    }
-});
 
 // Updated route handling for the main page
 app.get('/', (req, res) => {
