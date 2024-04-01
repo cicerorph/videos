@@ -79,7 +79,7 @@ app.use(
 );
 
 // fuck u bunny
-app.post('/upload', upload.single('video'), async (req, res) => {
+app.post('/upload', async (req, res) => {
     return res.status(400).send("Not accepting videos.");
     /* if (!req.session.name) {
         return res.send("Not logged in");
