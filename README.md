@@ -6,7 +6,6 @@
 <p align=center><a href=https://github.com/TechGigant/video-site>Original repository</a></p>
 
 ## Projects on this group
-There are also projects that the gamine project might also have:
 <!------------------------------------>
 |            Features        | Status |
 | -------------------------- | ------ |
